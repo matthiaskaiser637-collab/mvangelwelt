@@ -7,8 +7,78 @@
   <meta name="description" content="M&V Angelwelt – Ihr Spezialist für hochwertiges Angelzubehör. Ruten, Rollen, Köder, Schnüre und mehr. Schnelle Lieferung, faire Preise." />
   <link rel="stylesheet" href="style.css" />
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#c9a84c"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="MV Angelwelt"><link rel="apple-touch-icon" href="https://res.cloudinary.com/dwiq5poud/image/upload/c_fill,w_192,h_192/logo_jgbtca.png">
+
+<style>
+#installBanner {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+  border: 1px solid #c9a84c;
+  border-radius: 16px;
+  padding: 16px 20px;
+  z-index: 9999;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  align-items: center;
+  gap: 14px;
+  animation: slideUp 0.4s ease;
+}
+@keyframes slideUp { from { transform: translateX(-50%) translateY(100px); opacity:0; } to { transform: translateX(-50%) translateY(0); opacity:1; } }
+#installBanner img { width: 48px; height: 48px; border-radius: 10px; }
+#installBanner .install-text { flex: 1; }
+#installBanner .install-text strong { display: block; color: #c9a84c; font-size: .95rem; margin-bottom: 2px; }
+#installBanner .install-text span { color: #aaa; font-size: .8rem; }
+#installBanner .btn-install { background: linear-gradient(135deg, #a07830, #c9a84c); color: #000; border: none; padding: 10px 16px; border-radius: 10px; font-weight: bold; font-size: .85rem; cursor: pointer; white-space: nowrap; }
+#installBanner .btn-close { background: none; border: none; color: #666; font-size: 1.2rem; cursor: pointer; padding: 4px; }
+</style>
 </head>
 <body>
+
+<!-- PWA Install Banner -->
+<div id="installBanner">
+  <img src="https://res.cloudinary.com/dwiq5poud/image/upload/c_fill,w_192,h_192/logo_jgbtca.png" alt="Logo">
+  <div class="install-text">
+    <strong>M&amp;V Angelwelt App</strong>
+    <span>Kostenlos auf dem Startbildschirm installieren</span>
+  </div>
+  <button class="btn-install" id="btnInstall">📲 Installieren</button>
+  <button class="btn-close" id="btnCloseInstall">✕</button>
+</div>
+
+<script>
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  setTimeout(() => { document.getElementById('installBanner').style.display = 'flex'; }, 3000);
+});
+document.getElementById('btnInstall').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  }
+  document.getElementById('installBanner').style.display = 'none';
+});
+document.getElementById('btnCloseInstall').addEventListener('click', () => {
+  document.getElementById('installBanner').style.display = 'none';
+});
+// iOS Hinweis
+const isIOS = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
+if (isIOS && !isInStandaloneMode) {
+  setTimeout(() => { document.getElementById('installBanner').style.display = 'flex'; }, 3000);
+  document.getElementById('btnInstall').textContent = '📲 Anleitung';
+  document.getElementById('btnInstall').onclick = () => {
+    alert('iPhone: Tippen Sie auf das Teilen-Symbol (□↑) und dann auf „Zum Home-Bildschirm"');
+    document.getElementById('installBanner').style.display = 'none';
+  };
+}
+</script>
 
 <!-- Notification Bar -->
 <div class="notification-bar">
