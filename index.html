@@ -67,14 +67,27 @@ document.getElementById('btnInstall').addEventListener('click', async () => {
 document.getElementById('btnCloseInstall').addEventListener('click', () => {
   document.getElementById('installBanner').style.display = 'none';
 });
-// iOS Hinweis
+// Instagram / Facebook Browser erkennen
+const isInstagram = navigator.userAgent.indexOf('Instagram') > -1 || navigator.userAgent.indexOf('FBAN') > -1;
 const isIOS = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
 const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
-if (isIOS && !isInStandaloneMode) {
+
+if (isInstagram) {
+  // Instagram-Browser: Hinweis zum Öffnen in externem Browser
+  setTimeout(() => {
+    document.getElementById('installBanner').style.display = 'flex';
+    document.querySelector('#installBanner .install-text strong').textContent = '📲 Als App installieren';
+    document.querySelector('#installBanner .install-text span').textContent = 'Öffnen Sie den Shop im Browser für die App-Installation';
+    document.getElementById('btnInstall').textContent = '🌐 In Browser öffnen';
+    document.getElementById('btnInstall').onclick = () => {
+      window.open('https://matthiaskaiser637-collab.github.io/mvangelwelt/', '_blank');
+    };
+  }, 2000);
+} else if (isIOS && !isInStandaloneMode) {
   setTimeout(() => { document.getElementById('installBanner').style.display = 'flex'; }, 3000);
-  document.getElementById('btnInstall').textContent = '📲 Anleitung';
+  document.getElementById('btnInstall').textContent = '📲 Installieren';
   document.getElementById('btnInstall').onclick = () => {
-    alert('iPhone: Tippen Sie auf das Teilen-Symbol (□↑) und dann auf „Zum Home-Bildschirm"');
+    alert('Tippen Sie auf das Teilen-Symbol (□↑) unten und dann auf „Zum Home-Bildschirm"');
     document.getElementById('installBanner').style.display = 'none';
   };
 }
