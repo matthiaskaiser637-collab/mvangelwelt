@@ -1,0 +1,781 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Produkte – M&amp;V Angelwelt</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .shop-layout {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 28px;
+    }
+    @media(max-width:800px){
+      .shop-layout { grid-template-columns: 1fr; }
+      /* Auf schmalen Bildschirmen: Produkte zuerst, Sidebar danach */
+      .shop-layout { display: flex; flex-direction: column; }
+      .products-area { order: 1; }
+      .sidebar { order: 2; max-height: 300px; overflow-y: auto; }
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      height: fit-content;
+      position: sticky;
+      top: 220px;
+    }
+    .sidebar h3 {
+      font-size: .82rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-gold);
+    }
+    .sidebar-cat { margin-bottom: 18px; }
+    .sidebar-cat-title {
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sidebar-links { display: flex; flex-direction: column; gap: 4px; padding-left: 12px; }
+    .sidebar-links a {
+      font-size: .83rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      border-left: 2px solid transparent;
+      transition: all .2s;
+    }
+    .sidebar-links a:hover,
+    .sidebar-links a.active {
+      color: var(--gold);
+      border-left-color: var(--gold);
+      background: rgba(201,168,76,.07);
+    }
+
+    /* Produkt-Bereich */
+    .products-area {}
+    .products-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .products-header h1 {
+      font-size: 1.4rem;
+    }
+    .product-count {
+      font-size: .83rem;
+      color: var(--text-muted);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 4px 14px;
+      border-radius: 50px;
+    }
+
+    /* Produkt Karten */
+    .prod-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .prod-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color .2s, transform .2s;
+    }
+    .prod-card:hover { border-color: var(--border-gold); transform: translateY(-3px); }
+
+    .prod-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-secondary);
+    }
+    .prod-img-placeholder {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .prod-body { padding: 14px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .prod-badge {
+      font-size: .7rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      background: rgba(201,168,76,.12);
+      color: var(--gold);
+      border: 1px solid var(--border-gold);
+      padding: 2px 8px;
+      border-radius: 50px;
+      width: fit-content;
+    }
+    .prod-name { font-weight: 600; font-size: .93rem; color: var(--text-main); }
+    .prod-desc { font-size: .81rem; color: var(--text-muted); flex: 1; }
+    .prod-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .prod-price { font-family: 'Cinzel', serif; font-size: 1.05rem; color: var(--gold); }
+    .prod-price .old-price { font-size: .78rem; color: var(--text-muted); text-decoration: line-through; font-family: 'Open Sans',sans-serif; margin-left: 5px; }
+    .prod-tax { font-size: .72rem; color: var(--text-muted); margin-top: 2px; }
+    .btn-add {
+      background: none;
+      border: 1px solid var(--border-gold);
+      color: var(--gold);
+      padding: 6px 12px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: .78rem;
+      transition: background .2s, color .2s;
+    }
+    .btn-add:hover { background: var(--gold); color: var(--bg-primary); }
+
+    /* Lagerbestand */
+    .prod-stock {
+      font-size: .75rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 50px;
+      width: fit-content;
+      margin-top: 2px;
+    }
+    .stock-ok  { background: rgba(0,153,0,.12); color: #00bb00; border: 1px solid rgba(0,153,0,.3); }
+    .stock-low { background: rgba(255,165,0,.12); color: #ffaa00; border: 1px solid rgba(255,165,0,.3); }
+    .stock-out { background: rgba(200,0,0,.12); color: #cc0000; border: 1px solid rgba(200,0,0,.3); }
+
+    /* Leer-Zustand */
+    .empty-state {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-muted);
+    }
+    .empty-state .empty-icon { font-size: 3.5rem; margin-bottom: 16px; }
+    .empty-state h3 { color: var(--gold); margin-bottom: 8px; font-size: 1.1rem; }
+    .empty-state p { font-size: .88rem; }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: .82rem;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201,168,76,.07);
+    }
+
+    /* Cart Drawer (gleich wie index) */
+    .overlay { position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1100;display:none;backdrop-filter:blur(3px); }
+    .overlay.open { display:block; }
+    .cart-drawer { position:fixed;top:0;right:-420px;width:400px;max-width:95vw;height:100vh;background:var(--bg-secondary);border-left:1px solid var(--border-gold);z-index:1200;display:flex;flex-direction:column;transition:right .35s cubic-bezier(.4,0,.2,1); }
+    .cart-drawer.open { right:0; }
+    .cart-header { display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border); }
+    .cart-header h3 { font-size:1rem; }
+    .btn-close { background:none;border:none;color:var(--text-muted);font-size:1.4rem;cursor:pointer;transition:color .2s; }
+    .btn-close:hover { color:var(--gold); }
+    .cart-items { flex:1;overflow-y:auto;padding:16px 24px; }
+    .cart-empty { text-align:center;color:var(--text-muted);padding:40px 0;font-size:.9rem; }
+    .cart-item { display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border); }
+    .cart-item-icon { font-size:2rem;background:var(--bg-card);padding:8px;border-radius:4px; }
+    .cart-item-info { flex:1; }
+    .cart-item-name { font-size:.88rem;font-weight:600; }
+    .cart-item-price { font-size:.83rem;color:var(--gold); }
+    .cart-item-qty { display:flex;align-items:center;gap:8px;margin-top:6px; }
+    .qty-btn { background:var(--bg-card);border:1px solid var(--border);color:var(--text-main);width:24px;height:24px;border-radius:4px;cursor:pointer;font-size:.9rem; }
+    .qty-btn:hover { border-color:var(--gold);color:var(--gold); }
+    .cart-item-remove { background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.1rem;padding:4px;transition:color .2s; }
+    .cart-item-remove:hover { color:#e55; }
+    .cart-footer { padding:20px 24px;border-top:1px solid var(--border); }
+    .cart-total { display:flex;justify-content:space-between;font-family:'Cinzel',serif;font-size:1rem;margin-bottom:16px; }
+    .cart-total span:last-child { color:var(--gold); }
+    .btn-checkout { width:100%;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--bg-primary);border:none;padding:14px;border-radius:var(--radius);cursor:pointer;font-family:'Cinzel',serif;font-size:.9rem;letter-spacing:.05em;transition:opacity .2s; }
+    .btn-checkout:hover { opacity:.9; }
+    .toast-container { position:fixed;bottom:24px;right:24px;z-index:2000;display:flex;flex-direction:column;gap:10px; }
+    .toast { background:var(--bg-card);border:1px solid var(--border-gold);color:var(--text-main);padding:12px 20px;border-radius:var(--radius);font-size:.88rem;box-shadow:var(--shadow);animation:slideIn .3s ease; }
+    @keyframes slideIn { from{transform:translateX(110%);opacity:0} to{transform:none;opacity:1} }
+  </style>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#c9a84c"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="MV Angelwelt"><link rel="apple-touch-icon" href="https://res.cloudinary.com/dwiq5poud/image/upload/c_fill,w_192,h_192/logo_jgbtca.png">
+</head>
+<body>
+
+<div class="notification-bar">
+  🎣 Versand ab 4,99 € – kostenlos ab 250 € &nbsp;|&nbsp; Über 1.000 Artikel auf Lager &nbsp;|&nbsp; 30 Tage Rückgaberecht
+</div>
+
+<div class="header-logo-banner">
+    <a href="index.html"><img src="https://res.cloudinary.com/dwiq5poud/image/upload/logo_jgbtca.png" alt="M&amp;V Angelwelt"></a>
+  </div>
+<header>
+  <div class="header-inner">
+    <nav>
+      <a href="index.html#kategorien">Kategorien</a>
+      <a href="index.html#produkte">Alle Produkte</a>
+      <a href="index.html#angebote">Angebote</a>
+      <a href="versand.html">Versand</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+    <div class="header-actions">
+      <button class="btn-cart" onclick="openCart()">
+        🛒 Warenkorb
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <a href="index.html">Startseite</a>
+  <span>›</span>
+  <span id="breadcat"></span>
+  <span id="breadsubspan" style="display:none"><span>›</span> <span id="breadsub"></span></span>
+</div>
+
+<div class="shop-layout">
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <h3>Kategorien</h3>
+
+    <div class="sidebar-cat">
+      <div class="sidebar-cat-title">🎣 Angelruten</div>
+      <div class="sidebar-links">
+        <a href="produkte.html?kat=angelruten&sub=karpfenruten">Karpfenruten</a>
+        <a href="produkte.html?kat=angelruten&sub=welsruten">Welsruten</a>
+        <a href="produkte.html?kat=angelruten&sub=spinnruten">Spinnruten</a>
+        <a href="produkte.html?kat=angelruten&sub=feederruten">Feederruten</a>
+      </div>
+    </div>
+
+    <div class="sidebar-cat">
+      <div class="sidebar-cat-title">⚙️ Angelrollen</div>
+      <div class="sidebar-links">
+        <a href="produkte.html?kat=rollen&sub=spinnrollen">Spinnrollen</a>
+        <a href="produkte.html?kat=rollen&sub=freilaufrollen">Freilaufrollen</a>
+        <a href="produkte.html?kat=rollen&sub=karpfenrollen">Karpfenrollen</a>
+      </div>
+    </div>
+
+    <div class="sidebar-cat">
+      <div class="sidebar-cat-title">🧵 Schnüre & Vorfächer</div>
+      <div class="sidebar-links">
+        <a href="produkte.html?kat=schnuere&sub=monofile-schnur">Monofile Schnur</a>
+        <a href="produkte.html?kat=schnuere&sub=geflochtene-schnur">Geflochtene Schnur</a>
+        <a href="produkte.html?kat=schnuere&sub=monovorfaecher">Monovorfächer</a>
+        <a href="produkte.html?kat=schnuere&sub=stahlvorfaecher">Stahlvorfächer</a>
+        <a href="produkte.html?kat=schnuere&sub=karpfenvorfaecher">Karpfenvorfächer</a>
+      </div>
+    </div>
+
+    <div class="sidebar-cat">
+      <div class="sidebar-cat-title">🪝 Premium Angelhaken</div>
+      <div class="sidebar-links">
+        <a href="produkte.html?kat=haken&sub=welshaken">Welshaken</a>
+        <a href="produkte.html?kat=haken&sub=karpfenhaken">Karpfenhaken</a>
+        <a href="produkte.html?kat=haken&sub=aalhaken">Aalhaken</a>
+        <a href="produkte.html?kat=haken&sub=feederhaken">Feederhaken</a>
+        <a href="produkte.html?kat=haken&sub=raubfischhaken">Raubfischhaken</a>
+      </div>
+    </div>
+
+    <div class="sidebar-cat">
+      <div class="sidebar-cat-title">🐟 Gummifische & Kunstköder</div>
+      <div class="sidebar-links">
+        <a href="produkte.html?kat=gummi&sub=gummifische-ohne-haken">Gummifische ohne Haken</a>
+        <a href="produkte.html?kat=gummi&sub=gummifische-bestueckt">Gummifische bestückt</a>
+        <a href="produkte.html?kat=gummi&sub=wobbler">Wobbler</a>
+        <a href="produkte.html?kat=gummi&sub=aktive-koederfische">Aktive Köderfische</a>
+        <a href="produkte.html?kat=gummi&sub=passive-koederfische">Passive Köderfische</a>
+      </div>
+    </div>
+
+    <div class="sidebar-cat">
+      <div class="sidebar-cat-title">🎯 Posen & Schwimmer</div>
+      <div class="sidebar-links">
+        <a href="produkte.html?kat=posen&sub=feine-posen">Feine Posen</a>
+        <a href="produkte.html?kat=posen&sub=standard-posen">Standard Posen</a>
+        <a href="produkte.html?kat=posen&sub=raubfischposen">Raubfischposen</a>
+        <a href="produkte.html?kat=posen&sub=welsposen">Welsposen</a>
+        <a href="produkte.html?kat=posen&sub=u-posen">U-Posen</a>
+      </div>
+    </div>
+
+    <div class="sidebar-cat">
+      <div class="sidebar-cat-title">🎒 Tackle-Boxen & Taschen</div>
+      <div class="sidebar-links">
+        <a href="produkte.html?kat=tackle&sub=tackle-boxen">Tackle-Boxen</a>
+        <a href="produkte.html?kat=tackle&sub=angeltaschen">Angeltaschen</a>
+        <a href="produkte.html?kat=tackle&sub=rig-boxen">Rig-Aufbewahrungsboxen</a>
+      </div>
+    </div>
+
+    <div class="sidebar-cat">
+      <div class="sidebar-cat-title">🪑 Stühle & Liegen</div>
+      <div class="sidebar-links">
+        <a href="produkte.html?kat=stuehle&sub=einsteigerstuehle">Einsteigerstühle</a>
+        <a href="produkte.html?kat=stuehle&sub=feederstuehle">Feederstühle</a>
+        <a href="produkte.html?kat=stuehle&sub=karpfenstuehle">Karpfenstühle</a>
+        <a href="produkte.html?kat=stuehle&sub=profistuehle">Profistühle</a>
+        <a href="produkte.html?kat=stuehle&sub=liegen">Liegen</a>
+        <a href="produkte.html?kat=stuehle&sub=karpfenliegen">Karpfenliegen</a>
+      </div>
+    </div>
+
+    <div class="sidebar-cat">
+      <div class="sidebar-cat-title">🧥 Angelbekleidung</div>
+      <div class="sidebar-links">
+        <a href="produkte.html?kat=bekleidung&sub=hoodies-damen">Hoodies Damen</a>
+        <a href="produkte.html?kat=bekleidung&sub=hoodies-herren">Hoodies Herren</a>
+        <a href="produkte.html?kat=bekleidung&sub=kappen-huete">Kappen & Hüte</a>
+        <a href="produkte.html?kat=bekleidung&sub=hosen-damen">Hosen Damen</a>
+        <a href="produkte.html?kat=bekleidung&sub=hosen-herren">Hosen Herren</a>
+        <a href="produkte.html?kat=bekleidung&sub=jacken-damen">Jacken Damen</a>
+        <a href="produkte.html?kat=bekleidung&sub=jacken-herren">Jacken Herren</a>
+        <a href="produkte.html?kat=bekleidung&sub=gummistiefel">Gummistiefel</a>
+        <a href="produkte.html?kat=bekleidung&sub=watthosen">Watthosen</a>
+      </div>
+    </div>
+
+    <div class="sidebar-cat">
+      <div class="sidebar-cat-title">🔦 Angelzubehör</div>
+      <div class="sidebar-links">
+        <a href="produkte.html?kat=zubehoer&sub=kleinteile">Kleinteile</a>
+        <a href="produkte.html?kat=zubehoer&sub=fischtoeter">Fischtöter</a>
+        <a href="produkte.html?kat=zubehoer&sub=ersatzteile">Ersatzteile</a>
+        <a href="produkte.html?kat=zubehoer&sub=zangen">Zangen</a>
+        <a href="produkte.html?kat=zubehoer&sub=rutenhalter">Rutenhalter</a>
+        <a href="produkte.html?kat=zubehoer&sub=bissanzeiger">Bissanzeiger</a>
+        <a href="produkte.html?kat=zubehoer&sub=lampen">Lampen</a>
+        <a href="produkte.html?kat=zubehoer&sub=handschuhe">Handschuhe</a>
+        <a href="produkte.html?kat=zubehoer&sub=papiertaschen">Papiertaschen</a>
+      </div>
+    </div>
+
+    <div class="sidebar-cat">
+      <div class="sidebar-cat-title">🌽 Fischfutter</div>
+      <div class="sidebar-links">
+        <a href="produkte.html?kat=futter&sub=boilies">Boilies</a>
+        <a href="produkte.html?kat=futter&sub=pellets">Pellets</a>
+        <a href="produkte.html?kat=futter&sub=mais-partikel">Mais & Partikel</a>
+        <a href="produkte.html?kat=futter&sub=fertigfutter">Fertigfutter & Groundbait</a>
+        <a href="produkte.html?kat=futter&sub=fluessigkoeder">Flüssigköder & Dips</a>
+        <a href="produkte.html?kat=futter&sub=naturkoeder">Naturköder</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Produkt Bereich -->
+  <main class="products-area">
+    <div class="products-header">
+      <h1 id="pageTitle">Produkte</h1>
+      <span class="product-count" id="productCount">0 Artikel</span>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active">Alle</button>
+      <button class="filter-btn">Neuheiten</button>
+      <button class="filter-btn">Angebote</button>
+      <button class="filter-btn">Preis ↑</button>
+      <button class="filter-btn">Preis ↓</button>
+    </div>
+
+    <div class="prod-grid" id="prodGrid"></div>
+  </main>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">M<span>&amp;</span>V Angelwelt</a>
+      <p>Ihr Online-Shop für leidenschaftliche Angler.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Rechtliches</h4>
+      <ul>
+        <li><a href="impressum.html">Impressum</a></li>
+        <li><a href="datenschutz.html">Datenschutz</a></li>
+        <li><a href="agb.html">AGB</a></li>
+        <li><a href="widerruf.html">Widerrufsrecht</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Service</h4>
+      <ul>
+        <li><a href="versand.html">Versand &amp; Lieferung</a></li>
+        <li><a href="zahlungsarten.html">Zahlungsarten</a></li>
+        <li><a href="kontakt.html">Kontakt</a></li>
+      </ul>
+    </div>
+  </div>
+    <div class="footer-payment">
+    <span>Sichere Zahlung mit:</span>
+    <span class="pay-badge blue">VISA</span>
+    <span class="pay-badge red">Mastercard</span>
+    <span class="pay-badge orange">SOFORT</span>
+    <span class="pay-badge green">ÜBERWEISUNG</span>
+  </div>  <div class="footer-bottom">
+    <span>© 2024 M&amp;V Angelwelt. Alle Rechte vorbehalten.</span>
+  </div>
+</footer>
+
+<!-- Cart -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3>🛒 Warenkorb</h3>
+    <button class="btn-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">Ihr Warenkorb ist leer.</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total"><span>Gesamtsumme</span><span id="cartTotal">0,00 €</span></div>
+    <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:12px;">inkl. 19% MwSt. · zzgl. <a href="versand.html" style="color:var(--gold)">Versandkosten</a></div>
+    <button class="btn-checkout" onclick="window.location.href='https://buy.stripe.com/fZu8wPdyMcUW0OTgCJcV200'">💳 Zur Kasse → Sicher bezahlen mit Stripe</button>
+  </div>
+</div>
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ===== Produkte Datenbank =====
+const produktDB = {
+  'angelruten-karpfenruten': [
+    {
+      id: 101,
+      name: 'M&V Carbon Karpfenrute 3,60m 3lb',
+      desc: 'Hochmoderne Carbonstärke, ideal für große Karpfen. Sensitiver Blank, präziser Wurf bis 120m.',
+      price: 89.99,
+      oldPrice: 119.99,
+      badge: 'Angebot',
+      icon: '🎣',
+      img: 'cat-ruten.jpg',
+      stock: 10
+    },
+    {
+      id: 102,
+      name: 'ProCarp Karpfenrute 3,90m 3,5lb',
+      desc: 'Profirute für ambitionierte Karpfenangler. Schnelle Aktion, robuste Führungsringe.',
+      price: 129.99,
+      badge: 'Neu',
+      icon: '🎣',
+      img: 'cat-ruten.jpg',
+      stock: 5
+    }
+  ],
+  'zubehoer-rutenhalter': [
+    {
+      id: 301,
+      name: 'Vertical Rod Rack',
+      desc: 'Platzsparender Vertical Rod Rack zur sicheren und geordneten Aufbewahrung Ihrer Angelruten. Hält die Ruten aufrecht und schützt sie vor Beschädigungen – ideal für Zuhause, Garage oder Boot.',
+      price: 10.00,
+      badge: 'Neu',
+      icon: '🗂️',
+      img: 'https://res.cloudinary.com/dwiq5poud/image/upload/rod-rack_xifzvm.jpg',
+      stock: 1,
+      stripeLink: 'https://buy.stripe.com/fZu8wPdyMcUW0OTgCJcV200'
+    }
+  ],
+  'haken-welshaken': [
+    {
+      id: 201,
+      name: 'M&V Wels-Haken Gr. 2/0 – 10er Pack',
+      desc: 'Extrastark geschmiedet, speziell für Wels. Hohe Reißfestigkeit, scharfe Spitze für sicheren Anhieb.',
+      price: 8.99,
+      badge: 'Bestseller',
+      icon: '🪝',
+      img: 'cat-haken.jpg',
+      stock: 25
+    },
+    {
+      id: 202,
+      name: 'M&V Wels-Haken Gr. 4/0 – 5er Pack',
+      desc: 'Für große Welse ab 10kg. Gegabelter Widerhaken, rostfreier Stahl, extra langer Schenkel.',
+      price: 6.99,
+      icon: '🪝',
+      img: 'cat-haken.jpg',
+      stock: 2
+    }
+  ]
+};
+
+function getProdukte(kat, sub) {
+  return produktDB[kat + '-' + sub] || [];
+}
+
+function renderProdukte(produkte) {
+  const grid = document.getElementById('prodGrid');
+  document.getElementById('productCount').textContent = produkte.length + ' Artikel';
+  if (!produkte.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">📦</div><h3>Noch keine Produkte vorhanden</h3><p>Diese Kategorie wird gerade befüllt.<br>Schauen Sie bald wieder rein!</p></div>';
+    return;
+  }
+  grid.innerHTML = '';
+  produkte.forEach(function(p) {
+    var card = document.createElement('div');
+    card.className = 'prod-card';
+    var imgEl = document.createElement('img');
+    imgEl.className = 'prod-img';
+    imgEl.src = p.img;
+    imgEl.alt = p.name;
+    imgEl.onerror = function(){ this.style.display='none'; };
+    card.appendChild(imgEl);
+
+    var body = document.createElement('div');
+    body.className = 'prod-body';
+
+    if (p.badge) {
+      var badge = document.createElement('span');
+      badge.className = 'prod-badge';
+      badge.textContent = p.badge;
+      body.appendChild(badge);
+    }
+
+    var nameEl = document.createElement('div');
+    nameEl.className = 'prod-name';
+    nameEl.textContent = p.name;
+    body.appendChild(nameEl);
+
+    var descEl = document.createElement('div');
+    descEl.className = 'prod-desc';
+    descEl.textContent = p.desc;
+    body.appendChild(descEl);
+
+    var footer = document.createElement('div');
+    footer.className = 'prod-footer';
+
+    var priceEl = document.createElement('div');
+    priceEl.className = 'prod-price';
+    priceEl.textContent = p.price.toFixed(2).replace('.',',') + ' €';
+    if (p.oldPrice) {
+      var oldPriceEl = document.createElement('span');
+      oldPriceEl.className = 'old-price';
+      oldPriceEl.textContent = p.oldPrice.toFixed(2).replace('.',',') + ' €';
+      priceEl.appendChild(oldPriceEl);
+    }
+    var taxEl = document.createElement('div');
+    taxEl.className = 'prod-tax';
+    taxEl.textContent = 'inkl. 19% MwSt. zzgl. Versand';
+    footer.appendChild(priceEl);
+    body.appendChild(taxEl);
+
+    // Lagerbestand
+    var stock = (p.stock !== undefined) ? p.stock : 99;
+    var stockEl = document.createElement('div');
+    stockEl.className = 'prod-stock';
+    if (stock === 0) {
+      stockEl.className += ' stock-out';
+      stockEl.textContent = '❌ Ausverkauft';
+    } else if (stock <= 3) {
+      stockEl.className += ' stock-low';
+      stockEl.textContent = '⚠️ Nur noch ' + stock + ' auf Lager';
+    } else {
+      stockEl.className += ' stock-ok';
+      stockEl.textContent = '✅ ' + stock + ' auf Lager';
+    }
+    body.appendChild(stockEl);
+
+    var btn = document.createElement('button');
+    btn.className = 'btn-add';
+    if (stock === 0) {
+      btn.textContent = 'Ausverkauft';
+      btn.disabled = true;
+      btn.style.opacity = '0.4';
+      btn.style.cursor = 'not-allowed';
+    } else {
+      btn.textContent = '+ Warenkorb';
+    }
+    btn.dataset.id = p.id;
+    btn.dataset.name = p.name;
+    btn.dataset.price = p.price;
+    btn.dataset.icon = p.icon;
+    footer.appendChild(btn);
+
+    body.appendChild(footer);
+    card.appendChild(body);
+    grid.appendChild(card);
+  });
+
+  grid.addEventListener('click', function(e) {
+    var btn = e.target.closest('.btn-add');
+    if (!btn) return;
+    addToCart(Number(btn.dataset.id), btn.dataset.name, Number(btn.dataset.price), btn.dataset.icon);
+  }, { once: false });
+}
+
+// ===== URL Parameter lesen =====
+const params  = new URLSearchParams(window.location.search);
+const kat     = params.get('kat')  || '';
+const sub     = params.get('sub')  || '';
+
+// Kategorie-Namen Mapping
+const katNames = {
+  angelruten:'Angelruten', rollen:'Angelrollen', schnuere:'Schnüre & Vorfächer',
+  haken:'Premium Angelhaken', gummi:'Gummifische & Kunstköder', posen:'Posen & Schwimmer',
+  tackle:'Tackle-Boxen & Angeltaschen', stuehle:'Angelstühle & Karpfenliegen',
+  bekleidung:'Angelbekleidung', zubehoer:'Angelzubehör & Accessoires',
+  futter:'Fischfutter & Köderbeigaben'
+};
+
+const subNames = {
+  'karpfenruten':'Karpfenruten','welsruten':'Welsruten','spinnruten':'Spinnruten','feederruten':'Feederruten',
+  'spinnrollen':'Spinnrollen','freilaufrollen':'Freilaufrollen','karpfenrollen':'Karpfenrollen',
+  'monofile-schnur':'Monofile Schnur','geflochtene-schnur':'Geflochtene Schnur',
+  'monovorfaecher':'Monovorfächer','stahlvorfaecher':'Stahlvorfächer','karpfenvorfaecher':'Karpfenvorfächer',
+  'welshaken':'Welshaken','karpfenhaken':'Karpfenhaken','aalhaken':'Aalhaken',
+  'feederhaken':'Feederhaken','raubfischhaken':'Raubfischhaken',
+  'gummifische-ohne-haken':'Gummifische ohne Haken','gummifische-bestueckt':'Gummifische bestückt',
+  'wobbler':'Wobbler','aktive-koederfische':'Aktive Köderfische','passive-koederfische':'Passive Köderfische',
+  'feine-posen':'Feine Posen','standard-posen':'Standard Posen','raubfischposen':'Raubfischposen',
+  'welsposen':'Welsposen','u-posen':'U-Posen',
+  'tackle-boxen':'Tackle-Boxen','angeltaschen':'Angeltaschen','rig-boxen':'Rig-Aufbewahrungsboxen',
+  'einsteigerstuehle':'Anglerstühle für Einsteiger','feederstuehle':'Feederstühle',
+  'karpfenstuehle':'Karpfenstühle','profistuehle':'Profistühle','liegen':'Liegen','karpfenliegen':'Karpfenliegen',
+  'hoodies-damen':'Hoodies für Damen','hoodies-herren':'Hoodies für Herren',
+  'kappen-huete':'Kappen & Hüte','hosen-damen':'Hosen für Damen','hosen-herren':'Hosen für Herren',
+  'jacken-damen':'Jacken für Damen','jacken-herren':'Jacken für Herren',
+  'gummistiefel':'Gummistiefel','watthosen':'Watthosen',
+  'kleinteile':'Kleinteile','fischtoeter':'Fischtöter','ersatzteile':'Ersatzteile',
+  'zangen':'Zangen','rutenhalter':'Rutenhalter','bissanzeiger':'Bissanzeiger',
+  'lampen':'Lampen','handschuhe':'Handschuhe','papiertaschen':'Papiertaschen',
+  'boilies':'Boilies','pellets':'Pellets','mais-partikel':'Mais & Partikel',
+  'fertigfutter':'Fertigfutter & Groundbait','fluessigkoeder':'Flüssigköder & Dips','naturkoeder':'Naturköder'
+};
+
+// Titel setzen
+const katLabel = katNames[kat] || 'Alle Produkte';
+const subLabel = subNames[sub] || '';
+const title    = subLabel || katLabel;
+
+document.title = title + ' – M&V Angelwelt';
+document.getElementById('pageTitle').textContent = title;
+document.getElementById('breadcat').textContent  = katLabel;
+
+if (subLabel) {
+  document.getElementById('breadsubspan').style.display = 'inline';
+  document.getElementById('breadsub').textContent = subLabel;
+}
+
+// Aktiven Sidebar-Link markieren
+document.querySelectorAll('.sidebar-links a').forEach(function(a) {
+  try {
+    var href = a.getAttribute('href') || '';
+    var qIndex = href.indexOf('?');
+    if (qIndex === -1) return;
+    var query = href.slice(qIndex + 1);
+    var qp = new URLSearchParams(query);
+    if (qp.get('sub') === sub && qp.get('kat') === kat) {
+      a.classList.add('active');
+      var catEl = a.closest('.sidebar-cat');
+      if (catEl) catEl.querySelector('.sidebar-cat-title').style.color = 'var(--gold)';
+    }
+  } catch(e) {}
+});
+
+// Filter Buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// ===== Warenkorb =====
+let cart = [];
+try { cart = JSON.parse(localStorage.getItem('mv-cart') || '[]'); } catch(e) { cart = []; }
+
+function saveCart() { try { localStorage.setItem('mv-cart', JSON.stringify(cart)); } catch(e) {} }
+
+function addToCart(id, name, price, icon) {
+  const ex = cart.find(i => i.id === id);
+  if (ex) ex.qty++; else cart.push({ id, name, price, icon, qty: 1 });
+  saveCart(); updateCartUI();
+  showToast('✅ ' + name + ' hinzugefügt');
+}
+
+function removeFromCart(id) { cart = cart.filter(i => i.id !== id); saveCart(); updateCartUI(); }
+
+function changeQty(id, d) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty += d;
+  if (item.qty <= 0) removeFromCart(id); else { saveCart(); updateCartUI(); }
+}
+
+function updateCartUI() {
+  const count = cart.reduce((s,i) => s+i.qty, 0);
+  document.getElementById('cartCount').textContent = count;
+  const total = cart.reduce((s,i) => s+i.price*i.qty, 0);
+  document.getElementById('cartTotal').textContent = total.toFixed(2).replace('.',',') + ' €';
+  const c = document.getElementById('cartItems');
+  if (!cart.length) { c.innerHTML = '<div class="cart-empty">Ihr Warenkorb ist leer.</div>'; return; }
+  c.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-icon">${item.icon}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">${(item.price*item.qty).toFixed(2).replace('.',',')} €</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+          <span>${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+        </div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart(${item.id})">🗑</button>
+    </div>`).join('');
+}
+
+function openCart()  { document.getElementById('cartDrawer').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
+function closeCart() { document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
+function showToast(msg) { const c=document.getElementById('toastContainer'); const t=document.createElement('div'); t.className='toast'; t.textContent=msg; c.appendChild(t); setTimeout(()=>t.remove(),3200); }
+
+try { updateCartUI(); } catch(e) {}
+renderProdukte(getProdukte(kat, sub));
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+</body>
+</html>

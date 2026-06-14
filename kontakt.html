@@ -1,0 +1,265 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kontakt – M&amp;V Angelwelt</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .kontakt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 40px;
+    }
+    @media (max-width: 700px) { .kontakt-grid { grid-template-columns: 1fr; } }
+
+    .kontakt-info { display: flex; flex-direction: column; gap: 20px; }
+    .info-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex; gap: 16px; align-items: flex-start;
+      transition: border-color .2s;
+    }
+    .info-card:hover { border-color: var(--border-gold); }
+    .info-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .info-card h3 { font-size: .9rem; color: var(--gold); margin-bottom: 4px; }
+    .info-card p, .info-card a { font-size: .88rem; color: var(--text-muted); }
+
+    .form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+    }
+    .form-card h2 { font-size: 1.1rem; margin-bottom: 24px; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: .82rem; color: var(--text-muted); margin-bottom: 6px; letter-spacing: .04em; text-transform: uppercase; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 11px 14px;
+      border-radius: var(--radius);
+      font-size: .9rem;
+      font-family: 'Open Sans', sans-serif;
+      transition: border-color .2s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--gold); }
+    .form-group textarea { min-height: 130px; resize: vertical; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+
+    .form-check { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 20px; }
+    .form-check input { width: auto; margin-top: 3px; accent-color: var(--gold); }
+    .form-check label { font-size: .82rem; color: var(--text-muted); text-transform: none; letter-spacing: 0; }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: var(--bg-primary);
+      border: none;
+      padding: 13px;
+      border-radius: var(--radius);
+      font-family: 'Cinzel', serif;
+      font-size: .9rem;
+      letter-spacing: .05em;
+      cursor: pointer;
+      transition: opacity .2s, transform .2s;
+    }
+    .btn-submit:hover { opacity: .9; transform: translateY(-1px); }
+
+    .success-msg {
+      display: none;
+      background: rgba(201,168,76,.1);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      margin-top: 16px;
+    }
+  </style>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#c9a84c"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="MV Angelwelt"><link rel="apple-touch-icon" href="https://res.cloudinary.com/dwiq5poud/image/upload/c_fill,w_192,h_192/logo_jgbtca.png">
+</head>
+<body>
+
+<div class="notification-bar">
+  🎣 Versand ab 4,99 € – kostenlos ab 250 € &nbsp;|&nbsp; Über 1.000 Artikel auf Lager &nbsp;|&nbsp; 30 Tage Rückgaberecht
+</div>
+
+<div class="header-logo-banner">
+    <a href="index.html"><img src="https://res.cloudinary.com/dwiq5poud/image/upload/logo_jgbtca.png" alt="M&amp;V Angelwelt"></a>
+  </div>
+<header>
+  <div class="header-inner">
+    <nav>
+      <a href="index.html#kategorien">Kategorien</a>
+      <a href="index.html#produkte">Produkte</a>
+      <a href="index.html#angebote">Angebote</a>
+      <a href="versand.html">Versand</a>
+      <a href="kontakt.html" class="active">Kontakt</a>
+    </nav>
+    <div class="header-actions">
+      <a href="index.html" class="btn-primary" style="padding:8px 20px;font-size:.82rem">← Zurück zum Shop</a>
+    </div>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <a href="index.html">Startseite</a><span>›</span> Kontakt
+</div>
+
+<div class="section" style="padding-top:40px;padding-bottom:80px">
+  <div class="section-title">
+    <h2>Kontakt &amp; Support</h2>
+    <div class="divider"></div>
+    <p>Wir sind für Sie da – schreiben Sie uns oder rufen Sie uns an.</p>
+  </div>
+
+  <div class="kontakt-grid">
+    <!-- Info-Karten -->
+    <div class="kontakt-info">
+      <div class="info-card">
+        <div class="info-icon">📧</div>
+        <div>
+          <h3>E-Mail</h3>
+          <p>Allgemeine Anfragen:<br><a href="mailto:mvangelwelt@gmx.net">mvangelwelt@gmx.net</a></p>
+          <p style="margin-top:6px">Rückgaben / Widerruf:<br><a href="mailto:mvangelwelt@gmx.net">mvangelwelt@gmx.net</a></p>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">📞</div>
+        <div>
+          <h3>Telefon</h3>
+          <p><a href="tel:+4915567442173">+49 155 67442173</a></p>
+          <p style="margin-top:4px">Mo–Fr: 09:00 – 17:00 Uhr</p>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">📍</div>
+        <div>
+          <h3>Adresse</h3>
+          <p>
+            M&amp;V Angelwelt<br>
+            Matthias Kaiser<br>
+            Karl-Ertl-Str. 14<br>
+            94505 Bernried<br>
+            Deutschland
+          </p>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">⏱️</div>
+        <div>
+          <h3>Antwortzeit</h3>
+          <p>Wir antworten in der Regel innerhalb von <strong style="color:var(--gold)">24 Stunden</strong> an Werktagen.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kontaktformular -->
+    <div class="form-card">
+      <h2>Nachricht senden</h2>
+      <form id="contactForm" onsubmit="submitForm(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Vorname *</label>
+            <input type="text" required placeholder="Max" />
+          </div>
+          <div class="form-group">
+            <label>Nachname *</label>
+            <input type="text" required placeholder="Mustermann" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>E-Mail-Adresse *</label>
+          <input type="email" required placeholder="max@beispiel.de" />
+        </div>
+        <div class="form-group">
+          <label>Betreff</label>
+          <select>
+            <option value="">Bitte wählen …</option>
+            <option>Allgemeine Anfrage</option>
+            <option>Bestellstatus</option>
+            <option>Rückgabe / Widerruf</option>
+            <option>Produktberatung</option>
+            <option>Reklamation</option>
+            <option>Sonstiges</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ihre Nachricht *</label>
+          <textarea required placeholder="Wie können wir Ihnen helfen?"></textarea>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" id="dsgvo" required />
+          <label for="dsgvo">
+            Ich habe die <a href="datenschutz.html">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zur Bearbeitung meiner Anfrage zu. *
+          </label>
+        </div>
+        <button type="submit" class="btn-submit">Nachricht absenden →</button>
+        <div class="success-msg" id="successMsg">
+          ✅ Vielen Dank! Ihre Nachricht wurde gesendet.<br>
+          <span style="font-family:'Open Sans',sans-serif;font-size:.85rem;color:var(--text-muted)">Wir melden uns in Kürze bei Ihnen.</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">M<span>&amp;</span>V Angelwelt</a>
+      <p>Ihr Online-Shop für leidenschaftliche Angler.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Rechtliches</h4>
+      <ul>
+        <li><a href="impressum.html">Impressum</a></li>
+        <li><a href="datenschutz.html">Datenschutz</a></li>
+        <li><a href="agb.html">AGB</a></li>
+        <li><a href="widerruf.html">Widerrufsrecht</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Service</h4>
+      <ul>
+        <li><a href="versand.html">Versand &amp; Lieferung</a></li>
+        <li><a href="zahlungsarten.html">Zahlungsarten</a></li>
+        <li><a href="kontakt.html">Kontakt</a></li>
+      </ul>
+    </div>
+  </div>
+    <div class="footer-payment">
+    <span>Sichere Zahlung mit:</span>
+    <span class="pay-badge blue">VISA</span>
+    <span class="pay-badge red">Mastercard</span>
+    <span class="pay-badge orange">SOFORT</span>
+    <span class="pay-badge green">ÜBERWEISUNG</span>
+  </div>  <div class="footer-bottom">
+    <span>© 2024 M&amp;V Angelwelt. Alle Rechte vorbehalten.</span>
+  </div>
+</footer>
+
+<script>
+function submitForm(e) {
+  e.preventDefault();
+  document.getElementById('successMsg').style.display = 'block';
+  e.target.querySelector('button').style.display = 'none';
+}
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+﻿{
+  "name": "M&V Angelwelt",
+  "short_name": "MV Angelwelt",
+  "description": "Ihr Online-Shop für leidenschaftliche Angler",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#c9a84c",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://res.cloudinary.com/dwiq5poud/image/upload/c_fill,w_192,h_192/logo_jgbtca.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://res.cloudinary.com/dwiq5poud/image/upload/c_fill,w_512,h_512/logo_jgbtca.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

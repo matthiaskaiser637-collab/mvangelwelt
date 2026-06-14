@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zahlungsarten – M&amp;V Angelwelt</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .payment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin: 32px 0;
+    }
+    .payment-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      transition: border-color .2s;
+    }
+    .payment-card:hover { border-color: var(--border-gold); }
+    .payment-icon { font-size: 2.8rem; margin-bottom: 14px; }
+    .payment-name {
+      font-family: 'Cinzel', serif;
+      color: var(--gold);
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+    .payment-desc { font-size: .85rem; color: var(--text-muted); line-height: 1.6; }
+    .payment-logos {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .pay-badge {
+      background: #fff;
+      color: #000;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+      letter-spacing: .03em;
+    }
+    .pay-badge.blue { background: #1a1f71; color: #fff; }
+    .pay-badge.red  { background: #cc0000; color: #fff; }
+    .pay-badge.orange { background: #ff6600; color: #fff; }
+    .pay-badge.green { background: #009900; color: #fff; }
+    .info-box {
+      background: rgba(201,168,76,.07);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin: 28px 0;
+      font-size: .88rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .info-box strong { color: var(--gold); }
+  </style>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#c9a84c"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="MV Angelwelt"><link rel="apple-touch-icon" href="https://res.cloudinary.com/dwiq5poud/image/upload/c_fill,w_192,h_192/logo_jgbtca.png">
+</head>
+<body>
+
+<div class="notification-bar">
+  🎣 Versand ab 4,99 € – kostenlos ab 250 € &nbsp;|&nbsp; Über 1.000 Artikel auf Lager &nbsp;|&nbsp; 30 Tage Rückgaberecht
+</div>
+
+<div class="header-logo-banner">
+  <a href="index.html"><img src="https://res.cloudinary.com/dwiq5poud/image/upload/logo_jgbtca.png" alt="M&amp;V Angelwelt"></a>
+</div>
+<header>
+  <div class="header-inner">
+    <nav>
+      <a href="index.html#kategorien">Kategorien</a>
+      <a href="index.html#produkte">Produkte</a>
+      <a href="index.html#angebote">Angebote</a>
+      <a href="versand.html">Versand</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+    <div class="header-actions">
+      <a href="index.html" class="btn-primary" style="padding:8px 20px;font-size:.82rem">← Zurück zum Shop</a>
+    </div>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <a href="index.html">Startseite</a><span>›</span> Zahlungsarten
+</div>
+
+<div class="legal-page">
+  <h1>Zahlungsarten</h1>
+  <p class="subtitle">Sicher & bequem bezahlen – wählen Sie Ihre bevorzugte Zahlungsmethode</p>
+
+  <div class="payment-grid">
+
+    <!-- Kreditkarte -->
+    <div class="payment-card">
+      <div class="payment-icon">💳</div>
+      <div class="payment-name">Kreditkarte</div>
+      <div class="payment-desc">
+        Bezahlen Sie schnell und sicher mit Ihrer Visa- oder Mastercard-Kreditkarte.
+        Ihre Zahlung wird sofort verarbeitet und ist durch SSL-Verschlüsselung geschützt.
+      </div>
+      <div class="payment-logos">
+        <span class="pay-badge blue">VISA</span>
+        <span class="pay-badge red">Mastercard</span>
+      </div>
+    </div>
+
+    <!-- Sofortüberweisung -->
+    <div class="payment-card">
+      <div class="payment-icon">⚡</div>
+      <div class="payment-name">Sofortüberweisung</div>
+      <div class="payment-desc">
+        Bezahlen Sie direkt über Ihr Online-Banking – ohne Registrierung, sofort und sicher.
+        Die Zahlung wird in Echtzeit bestätigt und Ihre Bestellung sofort bearbeitet.
+      </div>
+      <div class="payment-logos">
+        <span class="pay-badge orange">SOFORT</span>
+      </div>
+    </div>
+
+    <!-- Vorkasse -->
+    <div class="payment-card">
+      <div class="payment-icon">🏦</div>
+      <div class="payment-name">Vorkasse / Banküberweisung</div>
+      <div class="payment-desc">
+        Überweisen Sie den Bestellbetrag auf unser Konto. Sobald die Zahlung bei uns eingegangen ist,
+        wird Ihre Bestellung sofort versandt. Zahlungsziel: <strong style="color:var(--gold)">7 Tage</strong>.
+      </div>
+      <div class="payment-logos">
+        <span class="pay-badge green">ÜBERWEISUNG</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="info-box">
+    🔒 <strong>Sichere Zahlung:</strong> Alle Zahlungen werden über verschlüsselte SSL-Verbindungen abgewickelt.
+    Ihre Bankdaten und persönlichen Informationen sind zu jeder Zeit sicher.<br><br>
+    📦 <strong>Bestellablauf:</strong> Nach erfolgter Zahlung erhalten Sie eine Bestellbestätigung per E-Mail.
+    Bei Vorkasse wird Ihre Bestellung nach Zahlungseingang versandt.<br><br>
+    ❓ <strong>Fragen zur Zahlung?</strong> Unser Support hilft Ihnen gerne weiter:
+    <a href="mailto:mvangelwelt@gmx.net">mvangelwelt@gmx.net</a> oder über unser
+    <a href="kontakt.html">Kontaktformular</a>.
+  </div>
+
+  <hr class="legal-divider">
+
+  <h2>Bankverbindung für Vorkasse / Überweisung</h2>
+  <div style="background:var(--bg-card);border:1px solid var(--border-gold);border-radius:var(--radius);padding:24px 28px;margin:16px 0;line-height:2">
+    <strong style="color:var(--gold)">M&amp;V Angelwelt</strong><br>
+    Kontoinhaber: <strong>Matthias Kaiser</strong><br>
+    IBAN: <strong>DE42 7416 0025 0000 4909 38</strong><br>
+    BIC: <strong>GENODEF1DEG</strong><br>
+    Bank: <strong>Volksbank Raiffeisenbank</strong><br>
+    <span style="color:var(--text-muted);font-size:.84rem">Verwendungszweck: Ihre Bestellnummer (wird per E-Mail mitgeteilt)</span>
+  </div>
+
+  <p style="font-size:.85rem;color:var(--text-muted);margin-top:16px">
+    ⚠️ Bitte geben Sie immer Ihre Bestellnummer als Verwendungszweck an, damit wir Ihre Zahlung korrekt zuordnen können.
+  </p>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">M<span>&amp;</span>V Angelwelt</a>
+      <p>Ihr Online-Shop für leidenschaftliche Angler.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Rechtliches</h4>
+      <ul>
+        <li><a href="impressum.html">Impressum</a></li>
+        <li><a href="datenschutz.html">Datenschutz</a></li>
+        <li><a href="agb.html">AGB</a></li>
+        <li><a href="widerruf.html">Widerrufsrecht</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Service</h4>
+      <ul>
+        <li><a href="versand.html">Versand &amp; Lieferung</a></li>
+        <li><a href="zahlungsarten.html">Zahlungsarten</a></li>
+        <li><a href="kontakt.html">Kontakt</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-payment">
+    <span>Sichere Zahlung mit:</span>
+    <span class="pay-badge blue">VISA</span>
+    <span class="pay-badge red">Mastercard</span>
+    <span class="pay-badge orange">SOFORT</span>
+    <span class="pay-badge green">ÜBERWEISUNG</span>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 M&amp;V Angelwelt. Alle Rechte vorbehalten.</span>
+  </div>
+</footer>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+</body>
+</html>
