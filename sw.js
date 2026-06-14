@@ -1,17 +1,10 @@
-const CACHE_NAME = 'mv-angelwelt-v1';
+﻿const CACHE_NAME = 'mv-angelwelt-v2';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/produkte.html',
-  '/style.css',
-  '/logo.png',
-  '/hero-bg.jpg',
-  '/cat-ruten.jpg',
-  '/cat-rollen.jpg',
-  '/cat-schnuere.jpg',
-  '/cat-tackleboxen.jpg',
-  '/cat-haken.jpg',
-  '/rod-rack.jpg'
+  '/mvangelwelt/',
+  '/mvangelwelt/index.html',
+  '/mvangelwelt/produkte.html',
+  '/mvangelwelt/style.css',
+  '/mvangelwelt/hero-bg.jpg'
 ];
 
 self.addEventListener('install', e => {
